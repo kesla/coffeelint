@@ -16,5 +16,5 @@ Download coffeelist.coffee from this repository.
 # Style rules
 
 Coffelint checks that
-
-- Each line is less than 80 charachters long
+- a line is less than 80 charachters long
+- a line don't end in whitespace
