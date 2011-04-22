@@ -19,3 +19,4 @@ Coffelint checks that
 - a line is less than 80 charachters long
 - a line don't end in whitespace
 - indentation don't include tabs, only spaces
+- there's a space before function arrow (->) and a space or newline afterwords
