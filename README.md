@@ -11,7 +11,7 @@ Download coffeelist.coffee from this repository.
 
 # Usage
 
-'coffee foo.coffee bar.coffee' checks the files foo.coffee and bar.coffee for style errors.
+"coffee coffeelint.coffee foo.coffee bar.coffee" checks the files foo.coffee and bar.coffee for style errors.
 
 # Style rules
 
