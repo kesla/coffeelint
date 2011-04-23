@@ -7,23 +7,35 @@ String::isWhiteSpace = () ->
 String::indentation = () ->
   this.split((/\S/))[0]
 
-checkStyle = (filename, line, str) ->
-  printError = (msg) ->
-    console.log "#{filename}:#{line} #{msg}"
+String::last = () ->
+  this[this.length-1]
 
-  if str.length > 80
+# Remove strings from input, replace them with dummy variable
+removeStrings = (input) ->
+  input = input.replace /\\\"/g, ""
+  input = input.replace /\\\'/g, ""
+  input = input.replace /\"[^\"]*\"/g, "a"
+  input = input.replace /\'[^\']*\'/g, "a"
+  input
+
+checkStyle = (filename, lineNr, line) ->
+  printError = (msg) ->
+    console.log "#{filename}:#{lineNr} #{msg}"
+
+  if line.length > 80
     printError "Line is > 80 characters long."
 
-  if str.length > 0 and str[str.length-1].isWhiteSpace()
+  if line.length > 0 and line.last().isWhiteSpace()
     printError "Line ends in whitespace."
 
-  if /\t/.test str.indentation()
+  if /\t/.test line.indentation()
     printError "Tab found in indentation, only spaces allowed."
 
-  if (i = str.indexOf("->")) isnt -1
-    unless str[i-1].isWhiteSpace()
+  clean = removeStrings line
+  if (i = clean.indexOf("->")) isnt -1
+    unless clean[i-1].isWhiteSpace()
       printError "No space before function declaration ('->')"
-    unless i is str.length - 2 or str[i+2].isWhiteSpace()
+    unless i is clean.length - 2 or clean[i+2].isWhiteSpace()
       printError "No space or newline after function declaration ('->')"
 
 argv._.forEach (filename) ->
