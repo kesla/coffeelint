@@ -18,28 +18,34 @@ removeStrings = (input) ->
   input = input.replace /\'[^\']*\'/g, "a"
   input
 
-checkStyle = (filename, lineNr, line) ->
-  printError = (msg) ->
-    console.log "#{filename}:#{lineNr} #{msg}"
+printError = (filename, lineNr, msg) ->
+  console.log "#{filename}:#{lineNr} #{msg}"
 
+checkStyle = (filename, lineNr, line) ->
   if line.length > 80
-    printError "Line is > 80 characters long."
+    printError filename, lineNr, "Line is > 80 characters long."
 
   if line.length > 0 and line.last().isWhiteSpace()
-    printError "Line ends in whitespace."
+    printError filename, lineNr, "Line ends in whitespace."
 
   if /\t/.test line.indentation()
-    printError "Tab found in indentation, only spaces allowed."
+    printError filename, lineNr,
+      "Tab found in indentation, only spaces allowed."
 
   clean = removeStrings line
   if (i = clean.indexOf("->")) isnt -1
     unless clean[i-1].isWhiteSpace()
-      printError "No space before function declaration ('->')"
+      printError filename, lineNr,
+        "No space before function declaration ('->')"
     unless i is clean.length - 2 or clean[i+2].isWhiteSpace()
-      printError "No space or newline after function declaration ('->')"
+      printError filename, lineNr,
+        "No space or newline after function declaration ('->')."
 
 argv._.forEach (filename) ->
   fs.readFile filename, "utf8", (err, data) ->
     lines = data.split('\n')
-    for i in [0...lines.length]
+    checkStyle(filename, 0, lines[0])
+    for i in [1...lines.length]
       checkStyle(filename, i+1, lines[i])
+      if lines[i] is "" and lines[i-1] is ""
+        printError filename, i, "Two empty lines found."

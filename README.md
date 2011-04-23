@@ -20,3 +20,4 @@ Coffelint checks that
 - a line don't end in whitespace
 - indentation don't include tabs, only spaces
 - there's a space before function arrow (->) and a space or newline afterwords
+- there's not two, after each other, empty lines
